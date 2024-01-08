@@ -74,7 +74,7 @@ function App() {
 
   return (
     <div>
-      <Draggable>
+      <Draggable cancel=".cancel">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -102,10 +102,10 @@ function App() {
           <span class="slider round"></span>
         </label> */}
           <label for="inputlat">Latitude:</label>
-          <input type="text" id="inputlat" name="inputlat" ref={latRef} />
+          <input className="cancel" type="text" id="inputlat" name="inputlat" ref={latRef} />
           <label for="inputlon">Longitude:</label>
-          <input type="text" id="inputlon" name="inputlon" ref={lonRef} />
-          <button className="button">
+          <input className="cancel" type="text" id="inputlon" name="inputlon" ref={lonRef} />
+          <button className="button cancel">
             <span>Go</span>
           </button>
         </form>
