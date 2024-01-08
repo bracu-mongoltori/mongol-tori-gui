@@ -18,8 +18,8 @@ function App() {
   const offlineURL = "./maps/{z}/{x}/{y}.png";
   const [isOnline, setIsOnline] = useState(true);
 
-  const latRef = useRef();
-  const lonRef = useRef();
+  const latRef = useRef(null);
+  const lonRef = useRef(null);
   const [position, setPosition] = useState(null);
   const markerIcon = L.icon({
     iconUrl: markerRed,
@@ -61,18 +61,9 @@ function App() {
 
   function InputMarker() {
     const markerRef2 = useRef(null);
-    const map = useMapEvents({
-      click(e) {
-        // map.flyTo(e.latlng, map.getZoom())
-      },
-      locationfound(e) {
-        latRef.current.value = e.latlng.lat;
-        lonRef.current.value = e.latlng.lng;
-        map.flyTo(e.latlng, map.getZoom());
-      },
-    });
+    
 
-    return latRef.current.value === null ? null : (
+    return latRef.current.value === 0 || lonRef.current.value === 0 ? null : (
       <Marker
         position={[latRef.current.value, lonRef.current.value]}
         ref={markerRef2}
