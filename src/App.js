@@ -13,22 +13,22 @@ import Draggable from "react-draggable";
 import markerRed from "./assets/markerRed.png";
 import markerBlack from "./assets/markerBlack.png";
 
-import { 
-  RosConnection, 
-  ImageViewer, 
-  Subscriber, 
-  TopicListProvider, 
-  useMsg, 
-  useTopicList, 
-  Publisher, 
-  Param, 
-  useParam, 
-  ParamListProvider, 
-  useParamList, 
-  ServiceListProvider, 
-  useServiceList, 
-  ServiceCaller, 
-  ServiceServer
+import {
+  RosConnection,
+  ImageViewer,
+  Subscriber,
+  TopicListProvider,
+  useMsg,
+  useTopicList,
+  Publisher,
+  Param,
+  useParam,
+  ParamListProvider,
+  useParamList,
+  ServiceListProvider,
+  useServiceList,
+  ServiceCaller,
+  ServiceServer,
 } from "rosreact";
 
 function App() {
@@ -64,6 +64,22 @@ function App() {
       },
     });
 
+    var ros = new ROSLIB.Ros({
+      url: "ws://localhost:9090",
+    });
+
+    ros.on("connection", function () {
+      console.log("Conneted to websocket server");
+    });
+
+    ros.on("error", function (error) {
+      console.log("Error connecting to websocket server: ", error);
+    });
+
+    ros.on("close", function () {
+      console.log("Connection to websocket server closed");
+    });
+
     return position === null ? null : (
       <Marker
         position={position}
@@ -79,7 +95,6 @@ function App() {
 
   function InputMarker() {
     const markerRef2 = useRef(null);
-    
 
     return latRef.current.value === 0 || lonRef.current.value === 0 ? null : (
       <Marker
@@ -110,7 +125,7 @@ function App() {
           }}
         >
           <RosConnection url="ws://localhost:9090" autoConnect>
-            <Subscriber topic='/keys' messageType='std_msgs/String'>
+            <Subscriber topic="/keys" messageType="std_msgs/String">
               <MsgView />
             </Subscriber>
           </RosConnection>
@@ -144,9 +159,21 @@ function App() {
           <span class="slider round"></span>
         </label> */}
           <label for="inputlat">Latitude:</label>
-          <input className="cancel" type="text" id="inputlat" name="inputlat" ref={latRef} />
+          <input
+            className="cancel"
+            type="text"
+            id="inputlat"
+            name="inputlat"
+            ref={latRef}
+          />
           <label for="inputlon">Longitude:</label>
-          <input className="cancel" type="text" id="inputlon" name="inputlon" ref={lonRef} />
+          <input
+            className="cancel"
+            type="text"
+            id="inputlon"
+            name="inputlon"
+            ref={lonRef}
+          />
           <button className="button cancel">
             <span>Go</span>
           </button>
@@ -207,7 +234,7 @@ function App() {
 
 const MsgView = () => {
   const msg = useMsg();
-  return <p> {`${msg.distance}`} </p>
-}
+  return <p> {`${msg.data}`} </p>;
+};
 
 export default App;
