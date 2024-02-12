@@ -13,6 +13,24 @@ import Draggable from "react-draggable";
 import markerRed from "./assets/markerRed.png";
 import markerBlack from "./assets/markerBlack.png";
 
+import { 
+  RosConnection, 
+  ImageViewer, 
+  Subscriber, 
+  TopicListProvider, 
+  useMsg, 
+  useTopicList, 
+  Publisher, 
+  Param, 
+  useParam, 
+  ParamListProvider, 
+  useParamList, 
+  ServiceListProvider, 
+  useServiceList, 
+  ServiceCaller, 
+  ServiceServer
+} from "rosreact";
+
 function App() {
   const onlineURL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   const offlineURL = "./maps/{z}/{x}/{y}.png";
@@ -74,6 +92,30 @@ function App() {
 
   return (
     <div>
+      <Draggable cancel=".cancel">
+        <div
+          style={{
+            position: "absolute",
+            top: "30px",
+            left: "30px",
+            zIndex: "9999",
+            display: "flex",
+            flexDirection: "column",
+
+            background: "rgba(255, 255, 255, 0.12)",
+            borderRadius: "16px",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+            backdropFilter: "blur(13.5px)",
+            padding: "10px",
+          }}
+        >
+          <RosConnection url="ws://localhost:9090" autoConnect>
+            <Subscriber topic='/keys' messageType='std_msgs/String'>
+              <MsgView />
+            </Subscriber>
+          </RosConnection>
+        </div>
+      </Draggable>
       <Draggable cancel=".cancel">
         <form
           onSubmit={(e) => {
@@ -161,6 +203,11 @@ function App() {
       )}
     </div>
   );
+}
+
+const MsgView = () => {
+  const msg = useMsg();
+  return <p> {`${msg.distance}`} </p>
 }
 
 export default App;
