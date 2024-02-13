@@ -15,9 +15,7 @@ app.get("/keys", (req, res) => {
     console.error('ROSlib error:', error);
   });
 
-  ros.connect("ws://localhost:9090").then(() => {
-    console.log("ROS connected");
-  });
+  ros.connect("ws://localhost:9090");
   // console.log("ROS connected");
 
   const listener = new roslib.Topic({
@@ -27,19 +25,9 @@ app.get("/keys", (req, res) => {
   });
 
   // Array to store received messages
-  const messages = [];
-
-  // Listener for incoming messages
   listener.subscribe(function (message) {
-    messages.push(message.data);
+    res.json(message.data);
   });
-
-  // Set timeout to stop listening after 5 seconds
-  setTimeout(() => {
-    listener.unsubscribe();
-    ros.close();
-    res.json(messages); // Return received messages as JSON
-  }, 5000); // Adjust timeout as needed
 });
 
 app.listen(port, () => {

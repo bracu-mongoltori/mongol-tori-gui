@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -64,21 +64,11 @@ function App() {
       },
     });
 
-    var ros = new ROSLIB.Ros({
-      url: "ws://localhost:9090",
-    });
-
-    ros.on("connection", function () {
-      console.log("Conneted to websocket server");
-    });
-
-    ros.on("error", function (error) {
-      console.log("Error connecting to websocket server: ", error);
-    });
-
-    ros.on("close", function () {
-      console.log("Connection to websocket server closed");
-    });
+    useEffect(() => {
+      fetch("localhost:4000/keys").then(res => {
+        console.log(res);
+      })
+    }, [])
 
     return position === null ? null : (
       <Marker
